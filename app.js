@@ -1,8 +1,9 @@
 //declare express variable of which use plugin
 var express = require('express'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    bodyParser = require('body-parser');
 
-var db = mongoose.connect('mongodb://localhost/bookAPI');
+var db = mongoose.connect('mongodb://db_user:bookapi123@ds062059.mlab.com:62059/bookapi');
 
 var Book = require('./models/bookModel');
 
@@ -11,35 +12,13 @@ var app = express();
 
 //initialize port no of env , if not installed default 3000
 var port = process.env.PORT || 3000;
-var bookRouter = express.Router();
+ 
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
-bookRouter.route('/Books')
-    .get(function (req, res) {
-        var query = {};
-        if (req.query.genre) {
-            query.genre = req.query.genre;
-        }
-        Book.find(query, function (err, books) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.json(books);
-            }
-        });
-    });
+var bookRouter = require('./Routes/bookRoutes')(Book);
 
-bookRouter.route('/Books/:bookId')
-    .get(function (req, res) {
-        Book.findById(req.params.bookId, function (err, book) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.json(book);
-            }
-        });
-    });
-
-app.use('/api', bookRouter);
+app.use('/api/books', bookRouter);
 
 //variable declared in line 5 app. get method = has 2 parameters (/ , function call back - 2 para - request and respond)
 app.get('/', function (req, res) {

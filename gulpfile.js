@@ -1,6 +1,7 @@
 //import gulp library and that require reference to nodemon library
 var gulp = require('gulp'),
-    nodemon = require('gulp-nodemon');
+    nodemon = require('gulp-nodemon'),
+    gulpMocha = require('gulp-mocha');
 
     //call task method para-string , function ; 
 gulp.task('default',function(){
@@ -16,3 +17,8 @@ gulp.task('default',function(){
         console.log('Restarting...');
     });
 });
+
+gulp.task('test',function(){
+    gulp.src('Tests/*.js',{read: false})
+        .pipe(gulpMocha({reporter:'nyan'}))
+})
