@@ -1,7 +1,9 @@
 //import gulp library and that require reference to nodemon library
 var gulp = require('gulp'),
     nodemon = require('gulp-nodemon'),
-    gulpMocha = require('gulp-mocha');
+    gulpMocha = require('gulp-mocha'),
+    env = require('gulp-env'),
+    supertest = require('supertest');
 
     //call task method para-string , function ; 
 gulp.task('default',function(){
@@ -19,6 +21,7 @@ gulp.task('default',function(){
 });
 
 gulp.task('test',function(){
+    env({vars: {ENV:'Test'}});
     gulp.src('Tests/*.js',{read: false})
         .pipe(gulpMocha({reporter:'nyan'}))
 })
