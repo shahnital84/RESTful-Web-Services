@@ -24,7 +24,10 @@ var routes = function (Book) {
 
     bookRouter.route('/:bookId')
         .get(function (req, res) {
-            res.json(req.book);
+            var returnBook = req.book.toJSON();
+            returnBook.links = {};
+            returnBook.links.FilterByThisGenre = encodeURI(req.protocol + '://' + req.headers.host + '/api/books/genre=' + returnBook.genre);
+            res.json(returnBook);
         })
         .put(function (req, res) {
             req.book.title = req.body.title;
